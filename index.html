@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pong</title>
+</head>
+<style>
+    * {
+        font-family: sans-serif;
+    }
+    body {
+        text-align: center;
+        background-color:rgb(237, 226, 238);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+        position: fixed;
+        width: 100%;
+    }
+
+    #gameBoard {
+        border: 2px solid;
+        background-color: black;
+        border-radius: 8px;
+    }
+
+    #scoreText{
+        font-family: "consolas", monospace;
+        font-size: 60px;
+    }
+
+    #resetBtn{
+        font-family: "consolas", monospace;
+        font-size: 18px;
+        width: 65px;
+        height: 35px;
+        border: 4px solid;
+        border-radius: 8px;
+        border-color: black;
+    }
+</style>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameBoard" width="800" height="500"></canvas>
+        <div id="scoreText"> 0 : 0 </div>
+        <button id="resetBtn">Reset</button>
+    </div>
+    <script src="./main.js"></script>
+</body>
+</html>
