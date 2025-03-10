@@ -13,8 +13,10 @@ let playerRightScore = 0;
 // Paddle settings
 let paddleHeight = 80;
 let paddleWidth = 10;
-let paddleSpeed = 8.0;
+let paddleSpeed = 4.0;
 let paddleColor = "white";
+
+let botSpeed = 0.6;
 
 let leftPaddle = {
     x: 10.0,
@@ -112,6 +114,7 @@ function checkCollision() {
         playerRightScore += 1;
         updateScore();
         ball.speed += 0.1;
+        botSpeed += 0.1;
         wait((new Date()).getTime(), 1000);
         startBall();
         return;
@@ -122,6 +125,7 @@ function checkCollision() {
         playerLeftScore += 1;
         updateScore();
         ball.speed += 0.1;
+        botSpeed += 0.1;
         wait((new Date()).getTime(), 1000);
         startBall();
         return;
@@ -146,32 +150,51 @@ function checkCollision() {
 }
 
 
-// Check keys for paddle movement
-window.addEventListener("keydown", movePaddle);
-function movePaddle(event) {
-    const keyPressed = event.key;
+// Set key states for paddle movement
+const keyStates = {
+    arrowUp: false,
+    arrowDown: false,
+};
 
-    if (keyPressed == 'ArrowUp') {
-        if(leftPaddle.y > 0){
+// Listen for key down and key up events to track key states
+window.addEventListener("keydown", (event) => {
+    if (event.key === 'ArrowUp') {
+        keyStates.arrowUp = true;
+    } else if (event.key === 'ArrowDown') {
+        keyStates.arrowDown = true;
+    }
+});
+
+window.addEventListener("keyup", (event) => {
+    if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
+        keyStates.arrowUp = false;
+        keyStates.arrowDown = false;
+    }
+});
+
+// Move paddle based on key state
+function movePaddle() {
+    if (keyStates.arrowUp) {
+        if (leftPaddle.y > 0) {
             leftPaddle.y -= paddleSpeed;
         }
-    } 
-    else if (keyPressed == 'ArrowDown') {
-        if(leftPaddle.y < gameHeight - paddleHeight){
+    }
+    else if (keyStates.arrowDown) {
+        if (leftPaddle.y < gameHeight - paddleHeight) {
             leftPaddle.y += paddleSpeed;
         }
     }
 }
 
 function moveBot() {
-    if (ball.y <= rightPaddle.y + paddleHeight/2.0) {
+    if (ball.y <= rightPaddle.y) {
         if (rightPaddle.y > 0) {
-            rightPaddle.y -= paddleSpeed;
+            rightPaddle.y -= botSpeed;
         }
     } 
-    else if (ball.y >= rightPaddle.y + paddleHeight/2.0) {
+    else if (ball.y >= rightPaddle.y + paddleHeight) {
         if (rightPaddle.y < gameHeight - paddleHeight) {
-            rightPaddle.y += paddleSpeed;
+            rightPaddle.y += botSpeed;
         }
     }
 }
@@ -190,6 +213,7 @@ window.onload = function() {
 function update() {
     clearBoard();
     drawPaddles();
+    movePaddle();
     moveBall();
     moveBot();
     drawBall();
